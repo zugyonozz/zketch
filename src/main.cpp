@@ -1,31 +1,26 @@
-// No main() function here
-// Instead, expose an "application" function
-
-#include "zketch.h"
-
-// This is called by the platform-specific entry point
-bool zketch_app_initialize() {
-    // Initialize UI elements
-    auto& uiManager = zketch::UIManager::getInstance();
-    
-    // Create elements
-    auto rect = std::make_shared<zketch::RectElement>(50, 50, 200, 100);
-    // ...
-    
-    uiManager.addElement(rect);
-    return true;
-}
-
-void zketch_app_update(float deltaTime) {
-    // Update application logic
-}
-
-void zketch_app_cleanup() {
-    // Clean up resources
-}
+#include <zketch.h>
+using namespace std;
 
 int main(){
-	if(!zketch_app_initialize()){
-		cerr << "gagal initialisasi zketch" << endl;
-	}
+	WindowData wd = {
+		"zketch Test",
+		1280, 960,
+		0
+	};
+
+	zmain zk(wd);
+
+	zbj rect({100, 200, 300, 400}, {0, 255, 255, 255}, zk.getRenderer());
+	rect.draw();
+	rect.show();
+	zfont font;
+	font.loadFont("notoSans", 48, "res/NotoSans-Regular.ttf");
+	zbj text({0, 0, 0, 0}, {0, 255, 0, 255}, zk.getRenderer());
+	text.draw(font.getFont("notoSans", 48), "Hello World", {150, 250});
+	text.show();
+	zk.present();
+
+	SDL_Delay(5000);
+
+	return 0;
 }

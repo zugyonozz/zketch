@@ -1,52 +1,41 @@
-# Makefile for zketch demo
+# Compiler dan flags
+CXX := g++
+CXXFLAGS := -std=c++17 -Wall -Iinclude -Iinclude/SDL3
 
-# Compiler and flags
-CXX = g++
-CXXFLAGS = -std=c++14 -Wall -Wextra -I./include
+# Direktori
+SRC_DIR := src
+MODULES_DIR := src/modules
+OBJ_DIR := build
+BIN := bin/zketch.exe
 
-# Platform detection
-ifeq ($(OS),Windows_NT)
-    PLATFORM = win32
-    LDFLAGS = -lgdi32 -luser32
-else
-    UNAME_S := $(shell uname -s)
-    ifeq ($(UNAME_S),Linux)
-        PLATFORM = linux
-        LDFLAGS = -lX11
-    endif
-    ifeq ($(UNAME_S),Darwin)
-        PLATFORM = macos
-        LDFLAGS = -framework Cocoa
-    endif
-endif
+# File sumber dan object
+SOURCES := $(wildcard $(SRC_DIR)/*.cpp) $(wildcard $(MODULES_DIR)/*.cpp)
+OBJECTS := $(patsubst %.cpp, $(OBJ_DIR)/%.o, $(SOURCES))
 
-# Source files
-SRCS = src/style.cpp \
-       src/element.cpp \
-       src/ui_manager.cpp \
-       src/zketch.cpp \
-       src/main.cpp \
-       platform/$(PLATFORM)/main.cpp
+# Library
+LIBS := -Llib -lSDL3 -lSDL3_image -lSDL3_ttf -lMsimg32 -lgdi32
 
-# Object files
-OBJS = $(SRCS:.cpp=.o)
+# Target default
+all: $(BIN)
 
-# Target executable
-TARGET = zketch_demo
-
-# Default target
-all: $(TARGET)
-
-# Linking
-$(TARGET): $(OBJS)
-	$(CXX) $(OBJS) -o $(TARGET) $(LDFLAGS)
-
-# Compilation
-%.o: %.cpp
+# Compile .cpp ke .o dalam direktori build
+$(OBJ_DIR)/%.o: %.cpp
+	@mkdir -p $(dir $@)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-# Clean up
-clean:
-	rm -f $(OBJS) $(TARGET)
+# Linking object files
+$(BIN): $(OBJECTS)
+	$(CXX) $(OBJECTS) -o $(BIN) $(LIBS)
 
-.PHONY: all clean
+# Jalankan program setelah build
+run:
+	$(MAKE) clean
+	$(MAKE) all
+	./$(BIN)
+
+# Bersihkan build
+clean:
+	@echo Cleaning...
+	@rm -rf build $(BIN)
+
+.PHONY: all run clean
