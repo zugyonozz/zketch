@@ -6,11 +6,6 @@
 #include <iostream>
 #include "zenv.h"
 
-using Bound = SDL_Rect;
-using Point = SDL_Point;
-using Color = SDL_Color;
-using Font = TTF_Font*;
-
 enum class BaseShape {
     LINE,
     RECT,
@@ -20,19 +15,15 @@ enum class BaseShape {
 
 class zbj{
 private:
-    Bound bound;
+    std::vector<Bound> bounds;
     Color color;
-	SDL_Renderer* renderer;
-    std::vector<SDL_Texture*> textures;
-
-    bool drawLineImpl();
-    bool drawRectImpl(float radiusScale);
-    bool drawTextImpl(const Font& font, const char* text, Point pos);
-    bool drawImageImpl(const char* path);
+	Renderer renderer;
+    std::vector<Texture> textures;
+	size_t ID;
 
 public:
     zbj();
-    zbj(Bound bound, Color color, SDL_Renderer* renderer);
+    zbj(Bound bound, Color color, Renderer renderer);
     ~zbj();
     bool drawLine();
     bool draw(float radiusScale = 0.0f);
@@ -42,7 +33,13 @@ public:
     bool show();
     void setBound(const Bound& newBound);
     void setColor(const Color& newColor);
+	void addItem();
+	bool removeItem(size_t ID);
+	void setActiveID(size_t newID);
     
     const Bound& getBound() const;
     const Color& getColor() const;
+	const size_t& getID() const;
+	const std::vector<Bound>& getBounds() const;
+	const std::vector<Texture>& getTextures() const;
 };

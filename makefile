@@ -13,7 +13,7 @@ SOURCES := $(wildcard $(SRC_DIR)/*.cpp) $(wildcard $(MODULES_DIR)/*.cpp)
 OBJECTS := $(patsubst %.cpp, $(OBJ_DIR)/%.o, $(SOURCES))
 
 # Library
-LIBS := -Llib -lSDL3 -lSDL3_image -lSDL3_ttf -lMsimg32 -lgdi32
+LIBS := -Llib -lSDL3 -lSDL3_image -lSDL3_ttf
 
 # Target default
 all: $(BIN)

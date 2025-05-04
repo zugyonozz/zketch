@@ -50,7 +50,7 @@ WindowData zmain::getWindowSize() const {
 	return wd;
 }
 
-SDL_Renderer*& zmain::getRenderer() {
+Renderer& zmain::getRenderer() {
 	return renderer;
 }
 

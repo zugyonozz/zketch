@@ -4,14 +4,10 @@
 #include <iostream>
 #include "zenv.h"
 
-using Font = TTF_Font*;
-
 struct FontData{
 	Font font;
 	size_t size;
-};
-
-using Fonts = std::unordered_map<std::string, FontData>;
+}; using Fonts = std::unordered_map<std::string, FontData>;
 
 class zfont{
 	private:

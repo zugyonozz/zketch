@@ -11,8 +11,8 @@ struct WindowData {
 
 class zmain {
 private:
-    SDL_Window* window;
-    SDL_Renderer* renderer;
+    Window window;
+    Renderer renderer;
     WindowData wd;
 
 public:
@@ -21,7 +21,7 @@ public:
     zmain(const WindowData& wd);
     bool initZketch(const WindowData& wd);
     WindowData getWindowSize() const ;
-    SDL_Renderer*& getRenderer();
+    Renderer& getRenderer();
 	bool present();
     ~zmain();
 };

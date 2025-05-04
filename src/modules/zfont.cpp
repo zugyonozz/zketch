@@ -9,7 +9,7 @@ bool zfont::loadFont(const std::string& name, size_t size, const std::string& pa
 	std::string key = name + "_" + std::to_string(size);
 	if (fonts.count(key)) return true;
 	TTF_Font* font = TTF_OpenFont(path.c_str(), size);
-	if (!font) { SDL_Log("Failed to load font %s: %s", path.c_str(), SDL_GetError()); return false; }
+	if (!font) { std::cerr << "Error: Could not load font:\n" << path << "\n" << SDL_GetError() << "\n"; return false; }
 	fonts[key] = { font, size };
 	return true;
 }
