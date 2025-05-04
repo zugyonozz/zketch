@@ -29,7 +29,7 @@ public:
     bool draw(float radiusScale = 0.0f);
     bool draw(const Font font, const char* text, Point pos);
     bool draw(const char* path);
-    bool clearTextures();
+    bool clearItems();
     bool show();
     void setBound(const Bound& newBound);
     void setColor(const Color& newColor);

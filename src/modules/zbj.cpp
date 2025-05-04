@@ -103,13 +103,16 @@ zbj::zbj(Bound bound, Color color, Renderer renderer) : color(color), renderer(r
 }
 
 zbj::~zbj(){
-	clearTextures();
+	clearItems();
 }
 
-bool zbj::clearTextures() {
+bool zbj::clearItems() {
 	for(auto& t : textures){
 		if (t) { SDL_DestroyTexture(t); }
 	} 
+	textures.clear();
+	bounds.clear();
+
 	return true;
 }
 
