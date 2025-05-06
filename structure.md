@@ -8,7 +8,7 @@
 - int h							--> h size
 - int flags						--> flags of window
 
-### zkmain						--> utama
+### zmain						--> utama
 - init()						--> dari lib SDL3 initialisasi SDL, SDL_image, SDL_ttf
 - create()						--> daftar data window dan buat window dan renderer
 - destroy()						--> destroy window dan renderer

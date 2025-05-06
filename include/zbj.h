@@ -28,7 +28,7 @@ public:
     bool drawLine();
     bool draw(float radiusScale = 0.0f);
     bool draw(const Font font, const char* text, Point pos);
-    bool draw(const char* path);
+    bool draw(const char* path, char keepRatio = 'n');
     bool clearItems();
     bool show();
     void setBound(const Bound& newBound);

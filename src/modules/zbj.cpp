@@ -78,13 +78,23 @@ bool zbj::draw(const Font font, const char* text, Point pos) {
 	return true;
 }
 
-bool zbj::draw(const char* path) {
+bool zbj::draw(const char* path, char keepRatioIn) {
 	if (textures[ID]) { std::cerr << "Error: Could not draw new image - clear textures first!" << std::endl; return false; }
 	if (!path) {std::cerr << "Error: Invalid image path!\n"; return false; }
 	Surface s = IMG_Load(path);
 	if (!s) { std::cerr << "Error: Could not load image! " << SDL_GetError() << std::endl; return false; }
 	Texture t = SDL_CreateTextureFromSurface(renderer, s);
 	if (!t) { std::cerr << "Error: Could not create texture from image! " << SDL_GetError() << std::endl; return false; }
+	if(keepRatioIn == 'W'){
+		float aspect = static_cast<float>(s->w) / static_cast<float>(s->h);
+		bounds[ID].w = static_cast<int>(bounds[ID].h * aspect);
+	}else if(keepRatioIn == 'H'){
+		float aspect = static_cast<float>(s->h) / static_cast<float>(s->w);
+		bounds[ID].h = static_cast<int>(bounds[ID].w * aspect);
+	}else if(keepRatioIn != 'n'){
+		std::cerr << "Error: Invalid keep ratio!\n";
+		return false;
+	}
 	SDL_DestroySurface(s);
 	textures[ID] = t;
 	return true;

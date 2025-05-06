@@ -5,7 +5,7 @@ zmain::zmain(){
 	renderer = nullptr;
 }
 
-zmain::zmain(const WindowData& wd) {
+zmain::zmain(const WinData& wd) {
 	if (!initZketch(wd)) {
 		std::cerr << "Error: Could not initialize zmain\n";
 	} else {
@@ -14,7 +14,7 @@ zmain::zmain(const WindowData& wd) {
 	}
 }
 
-bool zmain::initZketch(const WindowData& wd) {
+bool zmain::initZketch(const WinData& wd) {
 	if (!SDL_Init(SDL_INIT_VIDEO)) {
 		std::cerr << "Error: Could not initialize SDL: " << SDL_GetError() << "\n";
 		return false;
@@ -46,12 +46,28 @@ bool zmain::present(){
 	return SDL_RenderPresent(renderer);
 }
 
-WindowData zmain::getWindowSize() const {
+WinData zmain::getWinSize() const {
 	return wd;
 }
 
 Renderer& zmain::getRenderer() {
 	return renderer;
+}
+
+bool zmain::clearRender(Color color){
+	if(!SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a)){
+		std::cerr << "Error: Could not set color: " << SDL_GetError() << "\n";
+		return false;
+	}
+	if(!SDL_RenderClear(renderer)){
+		std::cerr << "Error: Could not render clear!: " << SDL_GetError() << "\n";
+		return false;
+	}
+	return true;
+}
+
+void zmain::delay(Uint32 ms){
+	SDL_Delay(ms);
 }
 
 zmain::~zmain() {

@@ -3,7 +3,7 @@
 #include <iostream>
 #include "zenv.h"
 
-struct WindowData {
+struct WinData {
     const char* title;
     int w, h;
     SDL_WindowFlags flags;
@@ -13,15 +13,17 @@ class zmain {
 private:
     Window window;
     Renderer renderer;
-    WindowData wd;
+    WinData wd;
 
 public:
     zmain();
 
-    zmain(const WindowData& wd);
-    bool initZketch(const WindowData& wd);
-    WindowData getWindowSize() const ;
+    zmain(const WinData& wd);
+    bool initZketch(const WinData& wd);
+    WinData getWinSize() const ;
     Renderer& getRenderer();
 	bool present();
+	bool clearRender(Color color);
+	void delay(Uint32 ms);
     ~zmain();
 };
