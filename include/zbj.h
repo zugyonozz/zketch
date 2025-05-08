@@ -6,20 +6,31 @@
 #include <iostream>
 #include "zenv.h"
 
-enum class BaseShape {
-    LINE,
-    RECT,
-    TEXT,
-    IMAGE
+enum class AnchorType{
+	ANCHOR_TOP_LEFT,
+	ANCHOR_TOP_MID,
+	ANCHOR_TOP_RIGHT,
+	ANCHOR_LEFT_MID,
+	ANCHOR_BOT_RIGHT,
+	ANCHOR_BOT_MID,
+	ANCHOR_BOT_LEFT,
+	ANCHOR_RIGHT_MID,
+	ANCHOR_CENTER
+};
+
+struct Anchor{
+	Bound origin;
+	Point current;
 };
 
 class zbj{
 private:
-    std::vector<Bound> bounds;
+    std::vector<Anchor> bounds;
     Color color;
 	Renderer renderer;
     std::vector<Texture> textures;
 	size_t ID;
+	AnchorType anchor;
 
 public:
     zbj();
@@ -36,10 +47,11 @@ public:
 	void addItem();
 	bool removeItem(size_t ID);
 	void setActiveID(size_t newID);
+	void setAnchorPt(AnchorType anchor);
     
     const Bound& getBound() const;
     const Color& getColor() const;
 	const size_t& getID() const;
-	const std::vector<Bound>& getBounds() const;
+	const std::vector<Anchor>& getBounds() const;
 	const std::vector<Texture>& getTextures() const;
 };

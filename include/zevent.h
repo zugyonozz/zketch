@@ -12,11 +12,10 @@ bool isHover(const Event& event, const zbj& obj) {
 	return false; // Bukan event mouse, tidak hover
 }
 
-bool isOnClick(const Event& event, const zbj& obj){
+bool isOnClick(const Event& event, Bound& bound){
 	if (event.type == SDL_EVENT_MOUSE_BUTTON_DOWN) {
 		int mx = event.button.x;
 		int my = event.button.y;
-		const Bound& bound = obj.getBound();
 		return (mx >= bound.x && mx <= bound.x + bound.w && my >= bound.y && my <= bound.y + bound.h);
     }
 	return false; // Bukan event mouse button down
