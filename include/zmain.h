@@ -25,8 +25,6 @@ public:
 	bool present();
 	bool clearRender(Color color);
 	void delay(Uint32 ms);
-	bool setMaximize();
-	bool setMinimize();
-	bool setResize(bool resizable);
+	void setWinSize();
     ~zmain();
 };

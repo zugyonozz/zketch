@@ -70,31 +70,8 @@ void zmain::delay(Uint32 ms){
 	SDL_Delay(ms);
 }
 
-bool zmain::setMaximize(){
-	if(!SDL_MaximizeWindow(window)){
-		std::cerr << "Error: Could not set fullscreen: " << SDL_GetError() << "\n";
-		return false;
-	}
+void zmain::setWinSize(){
 	SDL_GetWindowSize(window, &wd.w, &wd.h);
-	return true;
-}
-
-bool zmain::setMinimize(){
-	if(!SDL_MinimizeWindow(window)){
-		std::cerr << "Error: Could not set minimize: " << SDL_GetError() << "\n";
-		return false;
-	}
-	SDL_GetWindowSize(window, &wd.w, &wd.h);
-	return true;
-}
-
-bool zmain::setResize(bool resizable){
-	if(!SDL_SetWindowResizable(window, resizable)){
-		std::cerr << "Error: Could not set resizable: " << SDL_GetError() << "\n";
-		return false;
-	}
-	SDL_GetWindowSize(window, &wd.w, &wd.h);
-	return true;
 }
 
 zmain::~zmain() {
