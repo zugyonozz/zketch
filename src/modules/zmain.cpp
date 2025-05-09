@@ -70,8 +70,18 @@ void zmain::delay(Uint32 ms){
 	SDL_Delay(ms);
 }
 
-void zmain::setWinSize(){
+void zmain::updateWinSize(){
 	SDL_GetWindowSize(window, &wd.w, &wd.h);
+}
+
+void zmain::setWindowIcon(const char* path){
+	SDL_Surface* icon = IMG_Load(path);
+	if (icon) {
+		SDL_SetWindowIcon(window, icon);
+		SDL_DestroySurface(icon);
+	} else {
+		std::cerr << "Error: Could not load icon!: " << SDL_GetError() << "\n";
+	}
 }
 
 zmain::~zmain() {

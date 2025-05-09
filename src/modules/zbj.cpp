@@ -81,7 +81,7 @@ bool zbj::draw(const Font font, const char* text, Point pos) {
 	return true;
 }
 
-bool zbj::draw(const char* path, char keepRatioIn) {
+bool zbj::draw(const char* path) {
 	if (textures[ID]) { std::cerr << "Error: Could not draw new image - clear textures first!" << std::endl; return false; }
 	if (!path) {std::cerr << "Error: Invalid image path!\n"; return false; }
 	Surface s = IMG_Load(path);
@@ -92,24 +92,14 @@ bool zbj::draw(const char* path, char keepRatioIn) {
 		SDL_DestroySurface(s);  // Fixed: Added missing surface cleanup
 		return false; 
 	}
-	if(keepRatioIn == 'W'){
-		float aspect = static_cast<float>(s->w) / static_cast<float>(s->h);
-		bounds[ID].origin.w = static_cast<int>(bounds[ID].origin.h * aspect);
-	}else if(keepRatioIn == 'H'){
-		float aspect = static_cast<float>(s->h) / static_cast<float>(s->w);
-		bounds[ID].origin.h = static_cast<int>(bounds[ID].origin.w * aspect);
-	}else if(keepRatioIn != 'n'){
-		std::cerr << "Error: Invalid keep ratio option '" << keepRatioIn << "'. Use 'W', 'H', or 'n'.\n";
-		SDL_DestroySurface(s);
-		SDL_DestroyTexture(t);  // Fixed: Added missing texture cleanup
-		return false;
-	}
+	bounds[ID].origin.w = s->w;
+	bounds[ID].origin.h = s->h;
 	SDL_DestroySurface(s);
 	textures[ID] = t;
 	return true;
 }
 
-zbj::zbj() : renderer(nullptr), ID(0) {
+zbj::zbj(Renderer renderer) : renderer(renderer), ID(0) {
 	bounds.resize(1);
 	textures.resize(1);  // Fixed: Added missing texture resize
 	anchor.resize(1);    // Fixed: Added missing anchor resize
@@ -165,10 +155,9 @@ bool zbj::show(size_t id) {
 
 bool zbj::show() {
 	if (textures.empty()) { std::cerr << "Error: No textures to show!" << std::endl; return false; }  // Fixed: Check if vector is empty
-	
 	bool success = true;
-	size_t tempID = ID;  // Save original ID
-	
+	size_t tempID = ID;
+	SDL_SetHint(SDL_HINT_RENDER_LINE_METHOD, "1");
 	for(size_t i = 0; i < anchor.size(); i++) {
 		ID = i;  // Set current ID for anchor calculation
 		if (!textures[i]) { 
@@ -183,8 +172,7 @@ bool zbj::show() {
 			static_cast<float>(bounds[i].origin.h) };
 		SDL_RenderTexture(renderer, textures[i], nullptr, &fRect);
 	}
-	
-	ID = tempID;  // Restore original ID
+	ID = tempID;
 	return success;
 }
 
@@ -201,17 +189,9 @@ void zbj::addItem() {
 	textures.resize(ID+1);
 	bounds.resize(ID+1);
 	anchor.resize(ID+1);
-	
-	if (ID > 0) {
-		bounds[ID].origin = bounds[ID-1].origin;
-		bounds[ID].current = bounds[ID-1].current;
-		anchor[ID] = anchor[ID-1];
-	} else {
-		bounds[ID].origin = {0, 0, 0, 0};
-		bounds[ID].current = {0, 0};
-		anchor[ID] = AnchorType::ANCHOR_TOP_LEFT;
-	}
-	
+	bounds[ID].origin = bounds[ID-1].origin;
+	bounds[ID].current = bounds[ID-1].current;
+	anchor[ID] = anchor[ID-1];
 	textures[ID] = nullptr;
 }
 
@@ -290,12 +270,11 @@ void zbj::setAnchorPt(AnchorType anchorType) {
 	}
 }
 
-const Bound& zbj::getBound() const {
-	return bounds[ID].origin;
-}
-
-const Color& zbj::getColor() const { 
-	return color; 
+const Bound zbj::getRealBound(size_t index) const {
+	Bound b = bounds[index].origin;
+	b.x = bounds[index].current.x;
+	b.y = bounds[index].current.y;
+	return b;
 }
 
 const size_t& zbj::getID() const {

@@ -1,40 +1,42 @@
+// zevent.h
 #pragma once
 #include "zenv.h"
 #include "zbj.h"
+#include <functional>
 
-bool isHover(const Event& event, const zbj& obj) {
-    if (event.type == SDL_EVENT_MOUSE_MOTION) {
-		int mx = event.motion.x;
-		int my = event.motion.y;
-		const Bound& bound = obj.getBound();
-		return (mx >= bound.x && mx <= bound.x + bound.w && my >= bound.y && my <= bound.y + bound.h);
-    }
-	return false; // Bukan event mouse, tidak hover
+using std::function;
+using zFunctions = std::pair<std::function<bool()>, std::function<bool()>>;
+using zFollowUp = std::pair<Bound, std::function<void()>>;
+using zFollowUps = std::pair<Bound, zFunctions>;
+
+FPoint getMousePos(){
+	FPoint coord;
+	SDL_PumpEvents();
+	SDL_GetMouseState(&coord.x, &coord.y);
+	return coord;
 }
 
-bool isOnClick(const Event& event, Bound& bound){
-	if (event.type == SDL_EVENT_MOUSE_BUTTON_DOWN) {
-		int mx = event.button.x;
-		int my = event.button.y;
-		return (mx >= bound.x && mx <= bound.x + bound.w && my >= bound.y && my <= bound.y + bound.h);
-    }
-	return false; // Bukan event mouse button down
-}
-
-int isKeyDown(const Event& event, const zbj& obj){
-	if(event.type == SDL_EVENT_KEY_DOWN){
-		if(event.key.key == SDLK_A){
-			return 0;
+void isHover(FPoint coord, std::vector<zFollowUps>& funcs){
+	Bound b;
+	for(auto& f : funcs){
+		b = f.first;
+		if(coord.x >= b.x && coord.x <= b.x + b.w && coord.y >= b.y && coord.y <= b.y + b.h){
+			f.second.second();
+			continue;
 		}
-		if(event.key.key == SDLK_W){
-			return 1;
-		}
-		if(event.key.key == SDLK_D){
-			return 2;
-		}
-		if(event.key.key == SDLK_S){
-			return 3;
-		}
+		f.second.first();
 	}
-	return -1; // bukan event keydown
+}
+
+void isOnClick(const Event& event, std::vector<zFollowUp>& func){
+	for(auto& f : func){
+		if (event.type == SDL_EVENT_MOUSE_BUTTON_DOWN) {
+			int mx = event.button.x;
+			int my = event.button.y;
+			if(mx >= f.first.x && mx <= f.first.x + f.first.w && my >= f.first.y && my <= f.first.y + f.first.h){
+				f.second();
+				return;
+			}
+    	}
+	}
 }

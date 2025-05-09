@@ -1,9 +1,10 @@
+// zbj.h
 #pragma once
 #define _USE_MATH_DEFINES
 #include <cmath>
 #include <vector>
 #include <iostream>
-#include <cstring> // Added for strlen
+#include <cstring>
 #include "zenv.h"
 
 enum class AnchorType {
@@ -33,7 +34,7 @@ private:
     std::vector<AnchorType> anchor;
 
 public:
-    zbj();
+    zbj(Renderer renderer);
     zbj(Bound bound, Color color, Renderer renderer);
     ~zbj();
     
@@ -41,7 +42,7 @@ public:
     bool drawLine();
     bool draw(float radiusScale = 0.0f);
     bool draw(const Font font, const char* text, Point pos);
-    bool draw(const char* path, char keepRatio = 'n');
+    bool draw(const char* path);
     
     // Item management
     bool clearItems();
@@ -55,8 +56,7 @@ public:
     void setAnchorPt(AnchorType anchor);
     
     // Getters
-    const Bound& getBound() const;
-    const Color& getColor() const;
+	const Bound getRealBound(size_t index) const;
     const size_t& getID() const;
     const std::vector<Anchor>& getBounds() const;
     const std::vector<Texture>& getTextures() const;

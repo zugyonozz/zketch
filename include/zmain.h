@@ -1,4 +1,4 @@
-// zk_init.h
+// zmain.h
 #pragma once
 #include <iostream>
 #include "zenv.h"
@@ -25,6 +25,7 @@ public:
 	bool present();
 	bool clearRender(Color color);
 	void delay(Uint32 ms);
-	void setWinSize();
+	void updateWinSize();
+	void setWindowIcon(const char* path);
     ~zmain();
 };
