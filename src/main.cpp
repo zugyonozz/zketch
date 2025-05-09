@@ -1,3 +1,4 @@
+// zketch Demo
 #include "zketch.h"
 using namespace std;
 
@@ -111,7 +112,7 @@ int main(){
 
 	// create sequence follow up for nav Active
 	vector<zFollowUp> navActiveOnClicks = {
-		{navActive.getRealBound(0),
+		{navHome.getRealBound(0),
 		[&](){setPosNavActive(navActive, 0);}},
 		{navCall.getRealBound(0),
 		[&](){setPosNavActive(navActive, 1);}},
