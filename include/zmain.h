@@ -27,5 +27,7 @@ public:
 	void delay(Uint32 ms);
 	void updateWinSize();
 	void setWindowIcon(const char* path);
+	void startTextInput();
+	void stopTextInput();
     ~zmain();
 };

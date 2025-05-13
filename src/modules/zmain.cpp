@@ -84,6 +84,20 @@ void zmain::setWindowIcon(const char* path){
 	}
 }
 
+void zmain::startTextInput(){
+	if(!SDL_StartTextInput(window)){
+		std::cerr << "Error: Could not start text input: " << SDL_GetError() << "\n";
+		return;	
+	}
+}
+
+void zmain::stopTextInput(){
+	if(!SDL_StopTextInput(window)){
+		std::cerr << "Error: Could not stop text input: " << SDL_GetError() << "\n";
+		return;	
+	}
+}
+
 zmain::~zmain() {
 	if (renderer) {
 		SDL_DestroyRenderer(renderer);
